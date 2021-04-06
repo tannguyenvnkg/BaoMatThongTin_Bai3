@@ -20,7 +20,9 @@ public class Dec_RSA extends Enc{
     public static void main(String[] args) throws Exception {
         
         Enckethua();
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream("D:\\Enc_RSA.dat")));
+        BufferedReader in = 
+            new BufferedReader(new InputStreamReader
+            (new FileInputStream("D:\\Enc_RSA.dat")));
         String ctext = in.readLine();
         
         BigInteger c = new BigInteger(ctext);
