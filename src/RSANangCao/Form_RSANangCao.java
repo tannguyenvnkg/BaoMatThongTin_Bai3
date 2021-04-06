@@ -5,6 +5,27 @@
  */
 package RSANangCao;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.math.BigInteger;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Administrator
@@ -29,9 +50,9 @@ public class Form_RSANangCao extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtpublickey = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        txtprivatekey = new javax.swing.JTextArea();
         btnTaoKhoa = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -39,9 +60,9 @@ public class Form_RSANangCao extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         txtvanban = new javax.swing.JTextArea();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
+        txtmahoa = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTextArea4 = new javax.swing.JTextArea();
+        txtgiaima = new javax.swing.JTextArea();
         btnmahoa = new javax.swing.JButton();
         btngiaima = new javax.swing.JButton();
 
@@ -49,13 +70,13 @@ public class Form_RSANangCao extends javax.swing.JFrame {
 
         jLabel1.setText("Văn Bản");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtpublickey.setColumns(20);
+        txtpublickey.setRows(5);
+        jScrollPane1.setViewportView(txtpublickey);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane2.setViewportView(jTextArea2);
+        txtprivatekey.setColumns(20);
+        txtprivatekey.setRows(5);
+        jScrollPane2.setViewportView(txtprivatekey);
 
         btnTaoKhoa.setText("Tạo Khóa");
         btnTaoKhoa.addActionListener(new java.awt.event.ActionListener() {
@@ -74,17 +95,27 @@ public class Form_RSANangCao extends javax.swing.JFrame {
         txtvanban.setRows(5);
         jScrollPane3.setViewportView(txtvanban);
 
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane4.setViewportView(jTextArea3);
+        txtmahoa.setColumns(20);
+        txtmahoa.setRows(5);
+        jScrollPane4.setViewportView(txtmahoa);
 
-        jTextArea4.setColumns(20);
-        jTextArea4.setRows(5);
-        jScrollPane5.setViewportView(jTextArea4);
+        txtgiaima.setColumns(20);
+        txtgiaima.setRows(5);
+        jScrollPane5.setViewportView(txtgiaima);
 
         btnmahoa.setText("Mã Hóa");
+        btnmahoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmahoaActionPerformed(evt);
+            }
+        });
 
         btngiaima.setText("Giải Mã");
+        btngiaima.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btngiaimaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -177,8 +208,92 @@ public class Form_RSANangCao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTaoKhoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoKhoaActionPerformed
-        // TODO add your handling code here:
+         KeyPairGenerator kpg = null;
+        try {
+            kpg = KeyPairGenerator.getInstance("RSA");
+            kpg.initialize(1024);
+
+            KeyPair kp = kpg.genKeyPair();
+            PublicKey pbkey = kp.getPublic();
+            PrivateKey prkey = kp.getPrivate();
+
+            FileOutputStream f1;
+            f1 = new FileOutputStream("D:\\Skey_RSA_pub.dat");
+            ObjectOutputStream b1 = new ObjectOutputStream(f1);
+            b1.writeObject(pbkey);
+
+            FileOutputStream f2 = new FileOutputStream("D:\\Skey_RSA_priv.dat");
+            ObjectOutputStream b2 = new ObjectOutputStream(f2);
+            b2.writeObject(prkey);
+            txtpublickey.setText(pbkey.toString());
+            txtprivatekey.setText(prkey.toString());
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(Form_RSANangCao.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Form_RSANangCao.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Form_RSANangCao.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_btnTaoKhoaActionPerformed
+
+    private void btnmahoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmahoaActionPerformed
+        
+        String s= txtvanban.getText();
+        try {
+            FileInputStream f= new FileInputStream("D:\\Skey_RSA_pub.dat");
+            ObjectInputStream b = new ObjectInputStream(f);
+
+            RSAPublicKey pbk = (RSAPublicKey)b.readObject();
+            BigInteger e = pbk.getPublicExponent();
+            BigInteger n = pbk.getModulus();
+            System.out.println("e = " + e);
+            System.out.println("n = " + n);
+            byte ptext[] = s.getBytes("UTF8");
+            BigInteger m = new BigInteger(ptext);
+            BigInteger c = m.modPow(e, n);
+            System.out.println("c = " + c);
+            String cs = c.toString();
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("D:\\Enc_RSA.dat")));
+            out.write(cs,0,cs.length());
+            out.close();
+            txtmahoa.setText(cs);
+            } catch (Exception e) {
+        }
+       
+    }//GEN-LAST:event_btnmahoaActionPerformed
+
+    private void btngiaimaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngiaimaActionPerformed
+        try {
+            BufferedReader in = 
+             new BufferedReader(new InputStreamReader
+             (new FileInputStream("D:\\Enc_RSA.dat")));
+            String ctext = in.readLine();
+
+            BigInteger c = new BigInteger(ctext);
+
+            FileInputStream f= new FileInputStream("D:\\Skey_RSA_priv.dat");
+            ObjectInputStream b = new ObjectInputStream(f);
+
+            RSAPrivateKey prk = (RSAPrivateKey)b.readObject();
+            BigInteger d = prk.getPrivateExponent();
+            BigInteger n = prk.getModulus();
+            System.out.println("d = " + d);
+            System.out.println("n = " + n);
+            BigInteger m = c.modPow(d, n);
+            System.out.println("m = " + m);
+           byte[] mt = m.toByteArray();
+           String a = new String(mt);
+           txtgiaima.setText(a);
+           //StringBuilder sb = new StringBuilder();
+            System.out.println("PlainText is ");
+            for (int i = 0; i < mt.length; i++) {
+                System.out.print((char) mt[i]);
+                
+        }
+        } catch (Exception e) {
+        }
+        
+    }//GEN-LAST:event_btngiaimaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,10 +344,10 @@ public class Form_RSANangCao extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
-    private javax.swing.JTextArea jTextArea4;
+    private javax.swing.JTextArea txtgiaima;
+    private javax.swing.JTextArea txtmahoa;
+    private javax.swing.JTextArea txtprivatekey;
+    private javax.swing.JTextArea txtpublickey;
     private javax.swing.JTextArea txtvanban;
     // End of variables declaration//GEN-END:variables
 }
