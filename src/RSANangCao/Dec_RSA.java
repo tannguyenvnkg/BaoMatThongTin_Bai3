@@ -16,10 +16,10 @@ import java.security.interfaces.RSAPrivateKey;
  *
  * @author tanng
  */
-public class Dec_RSA extends Enc{
+public class Dec_RSA{
     public static void main(String[] args) throws Exception {
         
-        Enckethua();
+        
         BufferedReader in = 
             new BufferedReader(new InputStreamReader
             (new FileInputStream("D:\\Enc_RSA.dat")));
