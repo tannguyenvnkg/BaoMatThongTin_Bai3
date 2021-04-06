@@ -58,6 +58,11 @@ public class Form_RSANangCao extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea2);
 
         btnTaoKhoa.setText("Tạo Khóa");
+        btnTaoKhoa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTaoKhoaActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("RSA Nâng Cao");
 
@@ -170,6 +175,10 @@ public class Form_RSANangCao extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnTaoKhoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTaoKhoaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnTaoKhoaActionPerformed
 
     /**
      * @param args the command line arguments

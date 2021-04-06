@@ -176,7 +176,7 @@ public class FormRSA extends javax.swing.JFrame {
         String sdt = txtsdt.getText();
         String password = txtpassword.getText();
         String ketqua =txtketqua.getText();
-        chuoi = ten+diachi+email+sdt+password+ketqua;
+        chuoi = ten+"\n"+diachi+"\n"+email+"\n"+sdt+"\n"+password+"\n"+ketqua;
         RSA rsa = new RSA(8);
         n = rsa.getN();
         d = rsa.getD();
