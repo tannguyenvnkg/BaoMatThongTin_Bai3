@@ -284,12 +284,11 @@ public class Form_RSANangCao extends javax.swing.JFrame {
            byte[] mt = m.toByteArray();
            String a = new String(mt);
            txtgiaima.setText(a);
-           //StringBuilder sb = new StringBuilder();
-            System.out.println("PlainText is ");
-            for (int i = 0; i < mt.length; i++) {
-                System.out.print((char) mt[i]);
-                
-        }
+//            System.out.println("PlainText is ");
+//            for (int i = 0; i < mt.length; i++) {
+//                System.out.print((char) mt[i]);
+//                
+//        }
         } catch (Exception e) {
         }
         
